@@ -3,7 +3,7 @@ You can create any other helper funtions.
 Do not modify the given functions
 """
 
-import numpy as np
+import collections
 # from Collections import deque
 class Node:
     def __init__(self, state, parent, cost):
@@ -41,22 +41,24 @@ def DFS_Traversal(cost, start_point, goals):
     """
     path = []
     # TODO
-    if not cost or not start_point or not goals:
+    if not cost or not start_point or not goals or (start_point>(len(cost)-1)):
         return []
 
     # state, path cost, parent, action
-    frontier = []
+    # frontier = []
+    frontier = collections.deque()
     expanded = [False] * len(cost)
     print(expanded)
 
     ele = Node(start_point, [], 0)
-    frontier.insert(0, ele)
-    # print(ele.parent)
+
+    frontier.append(ele)
+
     parents = {key: [] for key in range(1, len(cost))}
     print(parents)
-    # print("frontier", frontier)
+
     for each in frontier:
-                print("(state, parent)",each.state, each.parent)
+                print("AAAAAAA (state, parent)",each.state, each.parent)
 
     while True:
         if len(frontier) == 0:
@@ -64,7 +66,8 @@ def DFS_Traversal(cost, start_point, goals):
             return []
 
         # remove node from top of stack
-        top = frontier.pop(0)
+        # top = frontier.pop(0)
+        top = frontier.pop()
         print("TOP: ",top.state)
 
         value = top.state
@@ -76,14 +79,15 @@ def DFS_Traversal(cost, start_point, goals):
             for j in reversed(range(1, len(cost))):
                 # print("j", j)
                 if (not expanded[j]) and (cost[value][j] != 0) and (cost[value][j] != -1): 
-                    frontier.insert(0, Node(j, [], 0))
+                    # frontier.insert(0, Node(j, [], 0))
+                    frontier.append(Node(j, [], 0))
                     # parents[j].append(value)
                     parents[j] = value
-                    print("parent added to",j,":", parents)
+                    # print("parent added to",j,":", parents)
 
             # print frontier
-            for each in frontier:
-                print("(state, parent)",each.state, each.parent, end = " ")
+            # for each in frontier:
+            #     print("(state, parent)",each.state, each.parent, end = " ")
 
 
         if top.state in goals:
@@ -111,37 +115,33 @@ def DFS_Traversal(cost, start_point, goals):
 
     return path
 
-# # remove later   
-# cost = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-#             [0, 0, 5, 9, -1, 6, -1, -1, -1, -1, -1],
-#             [0, -1, 0, 3, -1, -1, 9, -1, -1, -1, -1],
-#             [0, -1, 2, 0, 1, -1, -1, -1, -1, -1, -1],
-#             [0, 6, -1, -1, 0, -1, -1, 5, 7, -1, -1],
-#             [0, 1, -1, -1, 2, 0, -1, -1, -1, 2, -1],
-#             [0, -1, -1, -1, -1, -1, 0, -1, -1, -1, -1],
-#             [0, -1, -1, -1, -1, -1, -1, 0, -1, -1, -1],
-#             [0, -1, -1, -1, -1, 2, -1, -1, 0, -1, 8],
-#             [0, -1, -1, -1, -1, -1, -1, -1, -1, 0, 7],
-#             [0, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0]]
+# remove later   
+cost = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 5, 9, -1, 6, -1, -1, -1, -1, -1],
+            [0, -1, 0, 3, -1, -1, 0, -1, -1, -1, -1],
+            [0, -1, 2, 0, 1, -1, -1, -1, -1, -1, -1],
+            [0, 6, -1, -1, 0, -1, -1, 5, 7, -1, -1],
+            [0, 1, -1, -1, 2, 0, -1, -1, -1, 2, -1],
+            [0, -1, -1, -1, -1, -1, 0, -1, -1, -1, -1],
+            [0, -1, -1, -1, -1, -1, -1, 0, -1, -1, -1],
+            [0, -1, -1, -1, -1, 2, -1, -1, 0, -1, 8],
+            [0, -1, -1, -1, -1, -1, -1, -1, -1, 0, 7],
+            [0, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0]]
 
-# heuristic = [0, 5, 7, 3, 4, 6, 0, 0, 6, 5, 0]
-# # start = 1
+heuristic = [0, 5, 7, 3, 4, 6, 0, 0, 6, 5, 0]
+start = 1
 
-# start = 4
-# goals=[1]
+# goals = [6, 7, 10]
+goals = [6]
 
-
-# # goals = [6, 7, 10]
-# # goals = [6]
-
-# try:
-#     if DFS_Traversal(cost,start, goals)==[1, 2, 3, 4, 7]:
-#     # if DFS_Traversal(cost,start, goals)==[]:
-#         print("Test Case 2 for DFS Traversal PASSED")
-#     else:
-#         print("Test Case 2 for DFS Traversal FAILED")
-# except Exception as e:
-#     print("Test Case 2 for DFS Traversal FAILED due to ",e)
+try:
+    if DFS_Traversal(cost,start, goals)==[1, 2, 3, 4, 7]:
+    # if DFS_Traversal(cost,start, goals)==[]:
+        print("Test Case 2 for DFS Traversal PASSED")
+    else:
+        print("Test Case 2 for DFS Traversal FAILED")
+except Exception as e:
+    print("Test Case 2 for DFS Traversal FAILED due to ",e)
 
 # DFS_Traversal([],start, goals)
     
