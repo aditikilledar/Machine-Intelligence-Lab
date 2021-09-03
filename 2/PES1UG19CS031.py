@@ -65,7 +65,7 @@ def DFS_Traversal(cost, start_point, goals):
         top = frontier.pop()
 
         value = top.state
-        if not expanded[value]:
+         if not expanded[value]:
             # expand node if not already expanded
             expanded[value] = True
             # add largest ele in stack first
@@ -78,9 +78,7 @@ def DFS_Traversal(cost, start_point, goals):
         if top.state in goals:
             break        
 
-    #PROBLEM: need to do smn so that it picks smaller parent first !!!!!!!!! time to sleep, good job Aditi :)
-
-    # goal reached
+    # goal reached.
     v = top.state
     tempath = []
     path.append(v)

@@ -1,3 +1,4 @@
+
 """
 You can create any other helper funtions.
 Do not modify the given functions
@@ -7,9 +8,11 @@ import collections
 # from Collections import deque
 class Node:
     def __init__(self, state, parent, cost):
-        self.cost = 0 # path cost till now
-        self.parent = [] # who its parents are
+        self.cost = cost # path cost till now
+        self.parent = parent # who its parents are
         self.state = state # aka its value rn
+
+        self.parentcost = (self.parent, self.cost)
 
 def A_star_Traversal(cost, heuristic, start_point, goals):
     """
@@ -53,6 +56,11 @@ def DFS_Traversal(cost, start_point, goals):
     ele = Node(start_point, [], 0)
 
     frontier.append(ele)
+
+    # TEST
+    child = Node(99, 22, 44)
+    print("TEST: parentcost", child.parentcost)
+    # END TEST
 
     parents = {key: [] for key in range(1, len(cost))}
     print(parents)
@@ -118,7 +126,7 @@ def DFS_Traversal(cost, start_point, goals):
 # remove later   
 cost = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 5, 9, -1, 6, -1, -1, -1, -1, -1],
-            [0, -1, 0, 3, -1, -1, 0, -1, -1, -1, -1],
+            [0, -1, 0, 3, -1, -1, 9, -1, -1, -1, -1],
             [0, -1, 2, 0, 1, -1, -1, -1, -1, -1, -1],
             [0, 6, -1, -1, 0, -1, -1, 5, 7, -1, -1],
             [0, 1, -1, -1, 2, 0, -1, -1, -1, 2, -1],
@@ -131,8 +139,8 @@ cost = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 heuristic = [0, 5, 7, 3, 4, 6, 0, 0, 6, 5, 0]
 start = 1
 
-# goals = [6, 7, 10]
-goals = [6]
+goals = [6, 7, 10]
+# goals = [6]
 
 try:
     if DFS_Traversal(cost,start, goals)==[1, 2, 3, 4, 7]:
@@ -144,19 +152,3 @@ except Exception as e:
     print("Test Case 2 for DFS Traversal FAILED due to ",e)
 
 # DFS_Traversal([],start, goals)
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
