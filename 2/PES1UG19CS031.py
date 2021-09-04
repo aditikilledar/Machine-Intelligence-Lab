@@ -12,6 +12,127 @@ class Node:
         self.parent = parent # who its parents are
         self.state = state # aka its value rn
 
+# HEAP FUNCTIONS
+# MinHeap:
+
+def heapify(arr, size, pos):
+    # Dont forget its for array of Node objects
+
+    # print("inside heapify of position ", pos)
+    
+    # single element or no elements
+    if size == 1 or size == 0:
+        return
+
+    smallest = pos
+    leftindex = 2*pos+1
+    rightindex = 2*pos+2
+
+    if leftindex < size and arr[leftindex].cost < arr[smallest].cost and leftindex > 0:
+        smallest = leftindex
+
+    if rightindex < size and arr[rightindex].cost < arr[smallest].cost and rightindex > 0:
+        smallest = rightindex 
+
+    if smallest != pos:
+        #swap smallest and pos !!!!! check if works or else change
+        arr[pos], arr[smallest] = arr[smallest], arr[pos]
+        heapify(arr, size, smallest)
+
+        # print("-----\nSwapped",arr[pos].state, "and ", arr[smallest].state)
+        # print("inside heapify")
+        # for i in arr:
+        #     print(i.cost, end= " ")
+        # make heapify recursively
+
+def makeMinHeap(arr, size):
+    start = (size//2)-1
+
+    if start < 0:
+        return
+
+    for i in range(start, -1, -1):
+        heapify(arr, size, i)
+
+def addNode(arr, ele):
+    size = len(arr)
+    # print("child added ", ele.cost)
+    if not size:
+        arr.append(ele)
+    else:
+        lastparent = size//2
+        arr.append(ele)
+        makeMinHeap(arr, len(arr))
+    
+    # print("inside add node")
+    # for i in arr:
+    #     print(i.cost, end= " ")
+
+def popMin(arr):
+    # root has minimum
+    root = arr[0]
+    size = len(arr)
+
+    # print("size = ", size)
+
+    # print("inside popMin")
+    # for i in arr:
+    #     print(i.cost, end= " ")
+
+    # replace root with last one 
+    arr[0] = arr[size-1]
+    popd = arr.pop() #remove last element in the list
+    # print("element popd", popd.cost)
+
+    # print("after popd popMin")
+    # for i in arr:
+    #     print(i.cost, end= " ")
+
+    size = len(arr)
+    # make into a heap
+    lastparent = size//2
+    heapify(arr, size, 0)
+
+    return root
+
+
+    # HEAP TEST
+    # a = []
+
+    # for i in range(9, 3, -1):
+    #     child = Node(i, i, i)
+    #     addNode(a, child)
+
+    # for i in a:
+    #     print(i.state, end= " ")
+
+    # for i in range(1, 4):
+    #     popped = popMin(a)
+    #     print("popped MINIMUM", popped.cost)
+
+    #     print("$$$")
+    #     for i in a:
+    #         print(i.state, end=" ")
+
+def updateValue(arr, name, newvalue):
+    index=0
+    size = len(arr)
+    for ele in arr:
+        if ele.state == name:
+            break
+
+    ele.cost = newvalue
+    makeMinHeap(arr, size)
+
+def makepath(camefrom, node):
+    fullpath = [node]
+
+    while node in camefrom.keys():
+        node = camefrom[node]
+        fullpath.insert(0, node)
+
+    return fullpath
+
 def A_star_Traversal(cost, heuristic, start_point, goals):
     """
     Perform A* Traversal and find the optimal path 
@@ -25,9 +146,69 @@ def A_star_Traversal(cost, heuristic, start_point, goals):
     """
     path = []
     # TODO
-    
- 
-    
+
+    # cost function for start_point
+    startcost = heuristic[start_point]
+    start = Node(start_point, start_point, startcost)
+
+    goalDist = {key: float('inf') for key in goals}
+
+    frontier = [start]
+    print(frontier)
+    expanded = [False]*len(cost)
+
+    parentof = {key: {} for key in range(1, len(cost))}
+    haschild = {key: 0 for key in range(1, len(cost))}
+
+    camefrom = {}
+    #  g(n) for each node n
+    pathtillnow = {key: float('inf') for key in range(1, len(cost))}
+    pathtillnow[start_point] = 0
+    print("pathtillnow", pathtillnow)
+
+    while True:
+        if len(frontier) == 0: # no path
+            break
+            #  return []
+
+        for ele in frontier:
+            print("(", ele.state, ele.parent, ele.cost, ")")        
+
+        popped = frontier[0]
+        print("len=", len(frontier), " after pop of ", popped.state, "with predcost", popped.cost)
+
+        if popped.state in goals:
+            # createPath
+            print("GOAL REACHED")
+            return makepath(camefrom, popped.state)
+
+        popMin(frontier)
+
+        if not expanded[popped.state]:
+            #  expand it
+            expanded[popped.state] = True
+
+            for j in range(1, len(cost)):
+                if(cost[popped.state][j] != -1 and popped.state != j):
+                    # set parents to popped.state
+                    parent = popped.state
+
+                    Gvalue = pathtillnow[parent] + cost[parent][j]
+
+                    if Gvalue < pathtillnow[j]:
+                        # found a better path for j
+                        camefrom[j] = popped.state
+                        pathtillnow[j] = Gvalue
+                        Fcost = (Gvalue) + heuristic[j]
+
+                        child = Node(j, parent, Fcost)
+                        if child not in frontier:
+                            child = Node(j, parent, Fcost)
+                            addNode(frontier, child)
+
+            # print("pathtillnow", pathtillnow)
+            print("everyone's parents: ", parentof)
+
     return path
 
 
