@@ -12,6 +12,8 @@ class Node:
         self.parent = parent # who its parents are
         self.state = state # aka its value rn
 
+        self.parcost = (self.parent, self.cost)
+
 def A_star_Traversal(cost, heuristic, start_point, goals):
     """
     Perform A* Traversal and find the optimal path 
@@ -49,7 +51,7 @@ def DFS_Traversal(cost, start_point, goals):
     expanded = [False] * len(cost)
     # print(expanded)
 
-    ele = Node(start_point, [], 0)
+    ele = Node(start_point, 0, 0)
 
     frontier.append(ele)
 
@@ -58,7 +60,6 @@ def DFS_Traversal(cost, start_point, goals):
 
     while True:
         if len(frontier) == 0:
-            # print("No solution")
             return []
 
         # remove node from top of stack
@@ -66,13 +67,12 @@ def DFS_Traversal(cost, start_point, goals):
 
         value = top.state
         if not expanded[value]:
-            # expand node if not already expanded
             expanded[value] = True
-            # add largest ele in stack first
             for j in reversed(range(1, len(cost))):
-                # print("j", j)
                 if (not expanded[j]) and (cost[value][j] != 0) and (cost[value][j] != -1): 
-                    frontier.append(Node(j, [], 0))
+                    child = Node(j, value, cost[value][j])
+                    frontier.append(child)
+                    print("CHILD!!!!! parcost", child.parcost)
                     parents[j] = value
 
         if top.state in goals:

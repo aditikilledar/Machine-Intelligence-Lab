@@ -1,11 +1,10 @@
-
 """
 You can create any other helper funtions.
 Do not modify the given functions
 """
 
 import collections
-# from Collections import deque
+
 class Node:
     def __init__(self, state, parent, cost):
         self.cost = cost # path cost till now
@@ -13,6 +12,64 @@ class Node:
         self.state = state # aka its value rn
 
         self.parentcost = (self.parent, self.cost)
+
+# HEAP FUNCTIONS
+# MinHeap:
+
+# def left(pos):
+#     return 2*pos
+
+# def right(pos):
+#     return 2*pos+1
+
+# def parent(pos):
+#     return pos/2
+
+# def isLeaf(pos):
+#     if pos <= pqmaxsize and pos > (pqsize//2): 
+#         # should it be >= or just >? hmm
+#         return True
+#     return False
+
+    """
+     # Function to heapify the node at pos
+    def minHeapify(self, pos):
+ 
+        # If the node is a non-leaf node and greater
+        # than any of its child
+        if not self.isLeaf(pos):
+            if (self.Heap[pos] > self.Heap[self.leftChild(pos)] or
+               self.Heap[pos] > self.Heap[self.rightChild(pos)]):
+ 
+                # Swap with the left child and heapify
+                # the left child
+                if self.Heap[self.leftChild(pos)] < self.Heap[self.rightChild(pos)]:
+                    self.swap(pos, self.leftChild(pos))
+                    self.minHeapify(self.leftChild(pos))
+ 
+                # Swap with the right child and heapify
+                # the right child
+                else:
+                    self.swap(pos, self.rightChild(pos))
+                    self.minHeapify(self.rightChild(pos))
+ 
+    """
+
+def heapify(arr, size, pos):
+    # Dont forget its for array of Node objects
+
+    smallest = pos
+    leftindex = 2*pos
+    rightindex = 2*pos+1
+
+    if leftindex < size and arr[leftindex].cost < arr[smallest].cost:
+        smallest = leftindex
+
+    if rightindex < size and arr[rightindex].cost < arr[smallest].cost:
+        smallest = rightindex 
+
+
+
 
 def A_star_Traversal(cost, heuristic, start_point, goals):
     """
@@ -27,8 +84,6 @@ def A_star_Traversal(cost, heuristic, start_point, goals):
     """
     path = []
     # TODO
-    
- 
     
     return path
 
@@ -53,7 +108,7 @@ def DFS_Traversal(cost, start_point, goals):
     expanded = [False] * len(cost)
     print(expanded)
 
-    ele = Node(start_point, [], 0)
+    ele = Node(start_point, -1, 0)
 
     frontier.append(ele)
 
@@ -129,26 +184,20 @@ cost = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, -1, 0, 3, -1, -1, 9, -1, -1, -1, -1],
             [0, -1, 2, 0, 1, -1, -1, -1, -1, -1, -1],
             [0, 6, -1, -1, 0, -1, -1, 5, 7, -1, -1],
-            [0, 1, -1, -1, 2, 0, -1, -1, -1, 2, -1],
+            [0, -1, -1, -1, 2, 0, -1, -1, -1, 2, -1],
             [0, -1, -1, -1, -1, -1, 0, -1, -1, -1, -1],
             [0, -1, -1, -1, -1, -1, -1, 0, -1, -1, -1],
             [0, -1, -1, -1, -1, 2, -1, -1, 0, -1, 8],
             [0, -1, -1, -1, -1, -1, -1, -1, -1, 0, 7],
             [0, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0]]
-
 heuristic = [0, 5, 7, 3, 4, 6, 0, 0, 6, 5, 0]
 start = 1
-
 goals = [6, 7, 10]
-# goals = [6]
 
 try:
-    if DFS_Traversal(cost,start, goals)==[1, 2, 3, 4, 7]:
-    # if DFS_Traversal(cost,start, goals)==[]:
-        print("Test Case 2 for DFS Traversal PASSED")
+    if A_star_Traversal(cost, heuristic, start, goals)==[1,5,4,7]:
+        print("Test Case 1 for A* Traversal PASSED")
     else:
-        print("Test Case 2 for DFS Traversal FAILED")
-except Exception as e:
-    print("Test Case 2 for DFS Traversal FAILED due to ",e)
-
-# DFS_Traversal([],start, goals)
+        print("Test Case 1 for A* Traversal FAILED")
+except exception as e:
+    print("Test Case 1 for A* Traversal FAILED due to ",e)
