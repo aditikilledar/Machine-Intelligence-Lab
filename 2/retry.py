@@ -155,6 +155,8 @@ def A_star_Traversal(cost, heuristic, start_point, goals):
     pathtillnow[start_point] = 0
     print("pathtillnow", pathtillnow)
 
+    parentof = {key: float('inf') for key in range(1, len(cost))}
+
     while True:
         if len(frontier) == 0: # no path
             break
@@ -189,6 +191,9 @@ def A_star_Traversal(cost, heuristic, start_point, goals):
 
                     predcost = (pathtillnow[momdad] + cost[momdad][j]) + heuristic[j]
 
+                    # give it a parent
+                    parentof[j] = momdad
+
                     child = Node(j, momdad, predcost)
                     addNode(frontier, child)
 
@@ -196,6 +201,7 @@ def A_star_Traversal(cost, heuristic, start_point, goals):
                     
 
             print("pathtillnow", pathtillnow)
+            print("everyone's parents: ", parentof)
 
 
     print("!!!!!!!!!!goaldist", goalDist)
@@ -203,6 +209,17 @@ def A_star_Traversal(cost, heuristic, start_point, goals):
     temp = min(goalDist.values())
     optimalGoal = [key for key in goalDist if goalDist[key] == temp]
     print("closest goal", optimalGoal)
+
+    # actually calculate where goal came fgrom
+    # find path
+
+    end = optimalGoal[0]
+    tempath = []
+
+    # while end != start_point:
+    #     tempath.append(parentof[end])
+    #     end = parentof[end]
+    #     print(end)
 
     return path
 
