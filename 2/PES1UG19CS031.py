@@ -102,9 +102,6 @@ def A_star_Traversal(cost, heuristic, start_point, goals):
     frontier = [start]
     expanded = [False]*len(cost)
 
-    parentof = {key: {} for key in range(1, len(cost))}
-    haschild = {key: 0 for key in range(1, len(cost))}
-
     camefrom = {}
     #  g(n) for each node n
     pathtillnow = {key: float('inf') for key in range(1, len(cost))}
@@ -117,7 +114,6 @@ def A_star_Traversal(cost, heuristic, start_point, goals):
         popped = frontier[0]
 
         if popped.state in goals:
-            # createPath
             # print("GOAL REACHED")
             return makepath(camefrom, popped.state)
 
@@ -166,7 +162,6 @@ def DFS_Traversal(cost, start_point, goals):
 
     frontier = collections.deque()
     expanded = [False] * len(cost)
-    # print(expanded)
 
     ele = Node(start_point, [], 0)
 
