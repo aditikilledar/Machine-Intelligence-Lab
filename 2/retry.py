@@ -8,7 +8,7 @@ import collections
 class Node:
     def __init__(self, state, parent, cost):
         self.cost = cost # predicted cost, f(n) = path cost + heuristic
-        self.parent = parent # who its parents are
+        self.parent = parent # who its parent is
         self.state = state # aka its value rn
 
         # self.parentcost = (self.parent, self.cost)
@@ -115,6 +115,15 @@ def popMin(arr):
     #     for i in a:
     #         print(i.state, end=" ")
 
+def updateValue(arr, name, newvalue):
+    index=0
+    size = len(arr)
+    for ele in arr:
+        if ele.state == name:
+            break
+
+    ele.cost = newvalue
+    makeMinHeap(arr, size)
 
 def A_star_Traversal(cost, heuristic, start_point, goals):
     """
@@ -134,14 +143,22 @@ def A_star_Traversal(cost, heuristic, start_point, goals):
     startcost = heuristic[start_point]
     start = Node(start_point, start_point, startcost)
 
+    goalDist = {key: float('inf') for key in goals}
+
     frontier = [start]
     print(frontier)
     expanded = [False]*len(cost)
-    pathtillnow = {key: 0 for key in range(1, len(cost))}
+    #  g(n) for each node n
+    pathtillnow = {key: float('inf') for key in range(1, len(cost))}
+    # pathtillnow = {key: 0 for key in range(1, len(cost))}
+
+    pathtillnow[start_point] = 0
+    print("pathtillnow", pathtillnow)
 
     while True:
         if len(frontier) == 0: # no path
-            return []
+            break
+            #  return []
 
         for ele in frontier:
             print("(", ele.state, ele.parent, ele.cost, ")")        
@@ -150,21 +167,42 @@ def A_star_Traversal(cost, heuristic, start_point, goals):
         print("len=", len(frontier), " after pop of ", popped.state, "with predcost", popped.cost)
         # print(popped)
 
+        if popped.state in goals:
+            # createPath
+            print("GOAL REACHED", popped.state)
+            goalDist[popped.state] = pathtillnow[popped.state]
+
         if not expanded[popped.state]:
-            # not expanded
+            #  expand it
             expanded[popped.state] = True
 
             for j in range(1, len(cost)):
-                if(cost[popped.state][j] != -1):
+                if(cost[popped.state][j] != -1 and popped.state != j):
                     # set parents to popped.state
                     momdad = popped.state
-                    predcost = cost[popped.state][j] + heuristic[j]
+
+                    # pathtillnow[momdad] = min(pathtillnow[momdad] + cost[momdad][j], pathtillnow[j])
+
+                    pathtillnow[j] = min(pathtillnow[momdad] + cost[momdad][j], pathtillnow[j])
+
+                    print("f(",j,")","g + h", pathtillnow[momdad]+ cost[momdad][j]+ heuristic[j])
+
+                    predcost = (pathtillnow[momdad] + cost[momdad][j]) + heuristic[j]
+
                     child = Node(j, momdad, predcost)
                     addNode(frontier, child)
 
                     # update path length till now
-                    pathtillnow[j] = pathtillnow[popped.state] + cost[popped.state][j]
+                    
 
+            print("pathtillnow", pathtillnow)
+
+
+    print("!!!!!!!!!!goaldist", goalDist)
+    # extract key w lowest value
+    temp = min(goalDist.values())
+    optimalGoal = [key for key in goalDist if goalDist[key] == temp]
+    print("closest goal", optimalGoal)
 
     return path
 
