@@ -52,8 +52,7 @@ def addNode(arr, ele):
     else:
         lastparent = size//2
         arr.append(ele)
-        makeMinHeap(arr, len(arr))
-    
+        makeMinHeap(arr, len(arr))    
 
 def popMin(arr):
     # root has minimum
@@ -70,16 +69,6 @@ def popMin(arr):
     heapify(arr, size, 0)
 
     return root
-
-def updateValue(arr, name, newvalue):
-    index=0
-    size = len(arr)
-    for ele in arr:
-        if ele.state == name:
-            break
-
-    ele.cost = newvalue
-    makeMinHeap(arr, size)
 
 def makepath(camefrom, node):
     fullpath = [node]
@@ -121,13 +110,9 @@ def A_star_Traversal(cost, heuristic, start_point, goals):
     pathtillnow = {key: float('inf') for key in range(1, len(cost))}
     pathtillnow[start_point] = 0
 
-    while True:
-        if len(frontier) == 0: # no path
-            break
-            #  return []
-
-        # for ele in frontier:
-        #     print("(", ele.state, ele.parent, ele.cost, ")")        
+    while len(frontier):
+        # if len(frontier) == 0: # no path
+        #     break
 
         popped = frontier[0]
 
@@ -156,8 +141,8 @@ def A_star_Traversal(cost, heuristic, start_point, goals):
                         Fcost = (Gvalue) + heuristic[j]
 
                         child = Node(j, parent, Fcost)
+                        
                         # very important part
-
                         if child not in frontier:
                             child = Node(j, parent, Fcost)
                             addNode(frontier, child)
@@ -188,11 +173,9 @@ def DFS_Traversal(cost, start_point, goals):
     frontier.append(ele)
 
     parents = {key: [] for key in range(1, len(cost))}
-    # print(parents)
 
     while True:
         if len(frontier) == 0:
-            # print("No solution")
             return []
 
         # remove node from top of stack
@@ -204,7 +187,6 @@ def DFS_Traversal(cost, start_point, goals):
             expanded[value] = True
             # add largest ele in stack first
             for j in reversed(range(1, len(cost))):
-                # print("j", j)
                 if (not expanded[j]) and (cost[value][j] != 0) and (cost[value][j] != -1): 
                     frontier.append(Node(j, [], 0))
                     parents[j] = value
@@ -212,17 +194,12 @@ def DFS_Traversal(cost, start_point, goals):
         if top.state in goals:
             break        
 
-    #PROBLEM: need to do smn so that it picks smaller parent first !!!!!!!!! time to sleep, good job Aditi :)
-
     # goal reached
     v = top.state
-    tempath = []
     path.append(v)
-    # add parent of top into tempath until start_point is added, then reverse tempath and quit
     while v != start_point:
         path.append(parents[v])
-        v=parents[v]
-        
+        v=parents[v]    
     path.reverse()
 
     return path

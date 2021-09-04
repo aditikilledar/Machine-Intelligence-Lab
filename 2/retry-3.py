@@ -167,11 +167,7 @@ def A_star_Traversal(cost, heuristic, start_point, goals):
     pathtillnow[start_point] = 0
     print("pathtillnow", pathtillnow)
 
-    while True:
-        if len(frontier) == 0: # no path
-            break
-            #  return []
-
+    while len(frontier):
         for ele in frontier:
             print("(", ele.state, ele.parent, ele.cost, ")")        
 
@@ -210,51 +206,7 @@ def A_star_Traversal(cost, heuristic, start_point, goals):
             # print("pathtillnow", pathtillnow)
             print("everyone's parents: ", parentof)
 
-
-    # print("!!!!!!!!!!goaldist", goalDist)
-    # # extract key w lowest value
-    # temp = min(goalDist.values())
-    # optimalGoal = [key for key in goalDist if goalDist[key] == temp]
-    # print("closest goal", optimalGoal[0])
-
-    # # actually calculate where goal came from
-    # # find path
-
-    # end = optimalGoal[0]
-    # tempath = []
-
-    # # find min path parent for each node
-    # while end != start_point:
-    #     # print(parentof[end])
-    #     key_min = min(parentof[end].keys(), key=(lambda k: parentof[k]))
-    #     print("key_min", key_min)
-
-    #     # tempath.append(key_min)
-    #     # end = parentof[key_min]
-
-    # # while v != start_point:
-    #     # path.append(parents[v])
-    #     # print(path)
-    #     # v=parents[v]
-    # print(tempath, "tempath!!!!")
-
     return path
-
-# def A_star_Traversal(cost, heuristic, start_point, goals):
-#     """
-#     Perform A* Traversal and find the optimal path 
-#     Args:
-#         cost: cost matrix (list of floats/int)
-#         heuristic: heuristics for A* (list of floats/int)
-#         start_point: Staring node (int)
-#         goals: Goal states (list of ints)
-#     Returns:
-#         path: path to goal state obtained from A*(list of ints)
-#     """
-#     path = []
-#     # TODO
-
-#     return path
 
 
 def DFS_Traversal(cost, start_point, goals):
@@ -355,12 +307,24 @@ cost = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0]]
 heuristic = [0, 5, 7, 3, 4, 6, 0, 0, 6, 5, 0]
 start = 1
-goals = [6, 7, 10]
+goals = [10, 7, 6]
 
-try:
-    if A_star_Traversal(cost, heuristic, start, goals)==[1,5,4,7]:
-        print("Test Case 1 for A* Traversal PASSED")
-    else:
-        print("Test Case 1 for A* Traversal FAILED")
-except exception as e:
-    print("Test Case 1 for A* Traversal FAILED due to ",e)
+
+print(A_star_Traversal(cost, heuristic, start, goals))
+
+# try:
+#     if A_star_Traversal(cost, heuristic, start, goals)==[1,5,4,7]:
+#         print("Test Case 1 for A* Traversal PASSED")
+#     else:
+#         print("Test Case 1 for A* Traversal FAILED")
+# except exception as e:
+#     print("Test Case 1 for A* Traversal FAILED due to ",e)
+
+# try:
+#     if DFS_Traversal(cost,start, goals)==[1, 2, 3, 4, 7]:
+#     # if DFS_Traversal(cost,start, goals)==[]:
+#         print("Test Case 2 for DFS Traversal PASSED")
+#     else:
+#         print("Test Case 2 for DFS Traversal FAILED")
+# except Exception as e:
+#     print("Test Case 2 for DFS Traversal FAILED due to ",e)
