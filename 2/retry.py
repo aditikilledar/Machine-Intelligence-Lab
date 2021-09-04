@@ -155,7 +155,7 @@ def A_star_Traversal(cost, heuristic, start_point, goals):
     pathtillnow[start_point] = 0
     print("pathtillnow", pathtillnow)
 
-    parentof = {key: float('inf') for key in range(1, len(cost))}
+    parentNodes = {}
 
     while True:
         if len(frontier) == 0: # no path
@@ -169,10 +169,12 @@ def A_star_Traversal(cost, heuristic, start_point, goals):
         print("len=", len(frontier), " after pop of ", popped.state, "with predcost", popped.cost)
         # print(popped)
 
+
         if popped.state in goals:
             # createPath
+            # path.append(popped.state)
             print("GOAL REACHED", popped.state)
-            goalDist[popped.state] = pathtillnow[popped.state]
+            break
 
         if not expanded[popped.state]:
             #  expand it
@@ -183,43 +185,29 @@ def A_star_Traversal(cost, heuristic, start_point, goals):
                     # set parents to popped.state
                     momdad = popped.state
 
-                    # pathtillnow[momdad] = min(pathtillnow[momdad] + cost[momdad][j], pathtillnow[j])
-
+                    # PQ - heap
                     pathtillnow[j] = min(pathtillnow[momdad] + cost[momdad][j], pathtillnow[j])
-
-                    print("f(",j,")","g + h", pathtillnow[momdad]+ cost[momdad][j]+ heuristic[j])
-
                     predcost = (pathtillnow[momdad] + cost[momdad][j]) + heuristic[j]
-
                     # give it a parent
-                    parentof[j] = momdad
-
                     child = Node(j, momdad, predcost)
                     addNode(frontier, child)
 
                     # update path length till now
-                    
+                    # if (pathtillnow[momdad] + cost[momdad][j]) < pathtillnow[j]:
+                    parentNodes[j] = momdad
 
             print("pathtillnow", pathtillnow)
-            print("everyone's parents: ", parentof)
-
-
-    print("!!!!!!!!!!goaldist", goalDist)
-    # extract key w lowest value
-    temp = min(goalDist.values())
-    optimalGoal = [key for key in goalDist if goalDist[key] == temp]
-    print("closest goal", optimalGoal)
 
     # actually calculate where goal came fgrom
     # find path
 
-    end = optimalGoal[0]
-    tempath = []
+    print("in parentNodes")
+    print(parentNodes)
 
-    # while end != start_point:
-    #     tempath.append(parentof[end])
-    #     end = parentof[end]
-    #     print(end)
+    end = popped.state
+    # tempath = []
+
+    print(path, "PATH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
     return path
 
