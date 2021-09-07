@@ -11,17 +11,17 @@ import math
 '''Calculate the entropy of the enitre dataset'''
 # input:pandas_dataframe
 # output:int/float
-
+#-------------------------------
 def getYes(df):
     ''' counts the number of times result was a yes in a df'''
     last = df.columns.values[-1]
     return len(df[(df[last] == "yes")])
-
+#-------------------------------
 def getNo(df):
     ''' counts the number of times result was a no in a df'''
     last = df.columns.values[-1]
     return len(df[(df[last] == "no")])
-
+#-------------------------------
 def get_entropy_of_dataset(df):
     # TODO
 
@@ -45,7 +45,7 @@ def get_entropy_of_dataset(df):
     
     return 0
 
-
+#-------------------------------
 '''Return avg_info of the attribute provided as parameter'''
 # input:pandas_dataframe,str   {i.e the column name ,ex: Temperature in the Play tennis dataset}
 # output:int/float
@@ -64,19 +64,16 @@ def get_avg_info_of_attribute(df, attribute):
     for att in attrList:
         # need to do [[blah, blah]] instead of just df[blah, blah] to select multiple columns # NOT NEEDED (idk why i did it)
         # minidf = df[[att, result]]
+
         minidf = df[df[attribute] == att]
-        # print("--------------\nminidf\n", minidf)
         miniyesno = getYes(minidf) + getNo(minidf)
-
         sum += (miniyesno/totalyesno)*get_entropy_of_dataset(minidf)
-
-    print("SUM", sum)
 
     avg_info = sum
 
     return avg_info
 
-
+#-------------------------------
 '''Return Information Gain of the attribute provided as parameter'''
 # input:pandas_dataframe,str
 # output:int/float
@@ -85,15 +82,12 @@ def get_information_gain(df, attribute):
 
     # attr_in_df = dataset with only that column and the results column
     attr_in_df = df[[attribute]]
-    # print("in get IG", attribute, attr_in_df)
 
     information_gain = get_entropy_of_dataset(df) - get_avg_info_of_attribute(df, attribute)
 
     return information_gain
 
-
-
-
+#-------------------------------
 #input: pandas_dataframe
 #output: ({dict},'str')
 def get_selected_attribute(df):
@@ -104,77 +98,15 @@ def get_selected_attribute(df):
     example : ({'A':0.123,'B':0.768,'C':1.23} , 'C')
     '''
     # TODO
-
     # Step 1 : make dict
-
     information_gains = dict()
-
     attrNames = (df.iloc[:,:-1]).columns.values
-
     for each in attrNames:
         information_gains[each] = get_information_gain(df, each)
 
-    print(information_gains, "INFO GRAINZZZZZZZZZ")
-
     # Step 2 : pick biggest
     selected_column = max(information_gains, key=information_gains.get)
-
     finalans = (information_gains, selected_column)
-    print(finalans, "~~~~~~~ FINALASN")
 
     return finalans
-
-# -------------------------------------------------------------------------
-outlook = 'overcast,overcast,overcast,overcast,rainy,rainy,rainy,rainy,rainy,sunny,sunny,sunny,sunny,sunny'.split(',')
-temp = 'hot,cool,mild,hot,mild,cool,cool,mild,mild,hot,hot,mild,cool,mild'.split(',')
-humidity = 'high,normal,high,normal,high,normal,normal,normal,high,high,high,high,normal,normal'.split(',')
-windy = 'FALSE,TRUE,TRUE,FALSE,FALSE,FALSE,TRUE,FALSE,TRUE,FALSE,TRUE,FALSE,FALSE,TRUE'.split(',')
-play = 'yes,yes,yes,yes,yes,yes,no,yes,no,no,no,no,yes,yes'.split(',')
-dataset = {'outlook': outlook, 'temp': temp,'humidity': humidity, 'windy': windy, 'play': play}
-df = pd.DataFrame(dataset, columns=['outlook', 'temp', 'humidity', 'windy', 'play'])
-
-print(df)
-
-try:
-    if get_entropy_of_dataset(df) >= 0.938 and get_entropy_of_dataset(df) <= 0.942:
-        print("Test Case 1 for the function get_entropy_of_dataset PASSED")
-    else:
-        print("Test Case 1 for the function get_entropy_of_dataset FAILED")
-except Exception as e:
-    print(e)
-    print("Test Case 1 for the function get_entropy_of_dataset FAILED")
-
-try:
-    if get_avg_info_of_attribute(df, 'outlook') >= 0.691 and get_avg_info_of_attribute(df, 'outlook') <= 0.695:
-        print("Test Case 2 for the function get_avg_info_of_attribute PASSED")
-    else:
-        print("Test Case 2 for the function get_avg_info_of_attribute FAILED")
-
-except Exception as e:
-    print(e)
-    print("Test Case 2 for the function get_avg_info_of_attribute FAILED")
-
-try:
-    if get_avg_info_of_attribute(df, 'temp') >= 0.908 and get_avg_info_of_attribute(df, 'temp') <= 0.914:
-        print("Test Case 3 for the function get_avg_info_of_attribute PASSED")
-    else:
-        print("Test Case 3 for the function get_avg_info_of_attribute FAILED")
-
-except:
-    print("Test Case 3 for the function get_avg_info_of_attribute FAILED")
-
-try:
-    columns = ['outlook', 'temp', 'humidity', 'windy', 'play']
-    ans = get_selected_attribute(df)
-    dictionary = ans[0]
-    flag = (dictionary['outlook'] >= 0.244 and dictionary['outlook'] <= 0.248) and (dictionary['temp'] >= 0.0292 and dictionary['temp'] <= 0.0296) and (
-        dictionary['humidity'] >= 0.150 and dictionary['humidity'] <= 0.154) and (dictionary['windy'] >= 0.046 and dictionary['windy'] <= 0.05) and (ans[1] == 'outlook')
-    if flag:
-        print("Test Case 4 for the function get_selected_attribute PASSED")
-    else:
-        print("Test Case 4 for the function get_selected_attribute FAILED")
-
-except:
-    print("Test Case 4 for the function get_selected_attribute FAILED")
-
-print("INFO GAIN", get_information_gain(df, 'outlook'))
+# --------------------------------------------------
