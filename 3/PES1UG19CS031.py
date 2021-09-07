@@ -11,14 +11,23 @@ import math
 '''Calculate the entropy of the enitre dataset'''
 # input:pandas_dataframe
 # output:int/float
+
+def getYes(df):
+    ''' counts the number of times result was a yes in a df'''
+    return len(df[(df['play'] == "yes")])
+
+def getNo(df):
+    ''' counts the number of times result was a no in a df'''
+    return len(df[(df['play'] == "no")])
+
 def get_entropy_of_dataset(df):
     # TODO
 
     # E(S) = -aloga-blogb
     # where, a = p/(n+p)
     #    and b = n/(n+p)
-    p = len(df[(df['play'] == "yes")])
-    n = len(df[(df['play'] == "no")])
+    p = getYes(df)
+    n = getNo(df)
 
     print(p, n)
 
@@ -40,7 +49,13 @@ def get_avg_info_of_attribute(df, attribute):
 
     # weighted average mean
     sum = 0
-    # for each in attributes:
+    attrList = list(df.columns.values)
+
+    # remove last column of result
+    attrList.pop()
+
+    for att in attrList:
+        # print("YO MAMA so fat she a", att)
 
 
 
