@@ -14,11 +14,13 @@ import math
 
 def getYes(df):
     ''' counts the number of times result was a yes in a df'''
-    return len(df[(df['play'] == "yes")])
+    last = df.columns.values[-1]
+    return len(df[(df[last] == "yes")])
 
 def getNo(df):
     ''' counts the number of times result was a no in a df'''
-    return len(df[(df['play'] == "no")])
+    last = df.columns.values[-1]
+    return len(df[(df[last] == "no")])
 
 def get_entropy_of_dataset(df):
     # TODO
@@ -34,7 +36,12 @@ def get_entropy_of_dataset(df):
     a = p/(n+p)
     b = n/(p+n)
 
-    entropy = -(a*(math.log(a,2))+(b*(math.log(b,2))))
+    if n == 0:
+        entropy = -(a*(math.log(a,2)))
+    elif p == 0:
+        entropy = -(b*(math.log(b,2)))
+    else:
+        entropy = -(a*(math.log(a,2))+(b*(math.log(b,2))))
     
     # print(entropy, "entropy of the system")
 
@@ -49,15 +56,35 @@ def get_avg_info_of_attribute(df, attribute):
 
     # weighted average mean
     sum = 0
-    attrList = list(df.columns.values)
+    # attrList = list(df.columns.values)
 
     # remove last column of result
-    attrList.pop()
+    # result = attrList.pop()
+
+    # print(attrList)
+
+    totalyesno = getYes(df) + getNo(df)
+
+    attrList = df[attribute].unique()
+    print(attrList, "attrList")
+
 
     for att in attrList:
+        # need to do [[blah, blah]] instead of just df[blah, blah] to select multiple columns
+        # minidf = df[[att, result]]
+
+        minidf = df[df[attribute] == att]
+
+        print("--------------\nminidf\n", minidf)
+
         # print("YO MAMA so fat she a", att)
+        miniyesno = getYes(minidf) + getNo(minidf)
 
+        sum += (miniyesno/totalyesno)*get_entropy_of_dataset(minidf)
 
+    print("SUM", sum)
+
+    avg_info = sum
 
     return avg_info
 
@@ -107,7 +134,8 @@ try:
         print("Test Case 1 for the function get_entropy_of_dataset PASSED")
     else:
         print("Test Case 1 for the function get_entropy_of_dataset FAILED")
-except:
+except Exception as e:
+    print(e)
     print("Test Case 1 for the function get_entropy_of_dataset FAILED")
 
 try:
@@ -116,7 +144,8 @@ try:
     else:
         print("Test Case 2 for the function get_avg_info_of_attribute FAILED")
 
-except:
+except Exception as e:
+    print(e)
     print("Test Case 2 for the function get_avg_info_of_attribute FAILED")
 
 try:
