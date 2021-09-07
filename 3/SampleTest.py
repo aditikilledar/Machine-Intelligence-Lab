@@ -3,6 +3,9 @@ import importlib
 import argparse
 import pandas as pd
 
+#
+import numpy as np
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--SRN', required=True)
@@ -15,6 +18,7 @@ try:
    mymodule = importlib.import_module(subname)
 except Exception as e:
     print("Rename your written program as YOUR_SRN.py and run python3.7 SampleTest.py --SRN YOUR_SRN ")
+    print(e)
     sys.exit()
 
 
@@ -38,6 +42,17 @@ def test_case():
                'humidity': humidity, 'windy': windy, 'play': play}
     df = pd.DataFrame(dataset, columns=[
                       'outlook', 'temp', 'humidity', 'windy', 'play'])
+    print("Sameple dataset looks like:\n", df)
+
+
+    # att="outlook"
+    # # print("-------\n", df["play"] == "yes" & df["outlook"] == "overcast")
+    # ans = len(df[(df["play"] == "yes") & (df[
+    #     "outlook"] == "overcast")])
+    # print("-------\n")
+    # print(ans)
+
+
     try:
         if get_entropy_of_dataset(df) >= 0.938 and get_entropy_of_dataset(df) <= 0.942:
             print("Test Case 1 for the function get_entropy_of_dataset PASSED")
