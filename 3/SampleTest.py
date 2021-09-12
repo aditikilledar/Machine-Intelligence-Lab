@@ -2,8 +2,6 @@ import sys
 import importlib
 import argparse
 import pandas as pd
-
-#
 import numpy as np
 
 
@@ -21,12 +19,10 @@ except Exception as e:
     print(e)
     sys.exit()
 
-
 get_selected_attribute = mymodule.get_selected_attribute
 get_information_gain = mymodule.get_information_gain
 get_avg_info_of_attribute = mymodule.get_avg_info_of_attribute
 get_entropy_of_dataset = mymodule.get_entropy_of_dataset
-
 
 def test_case():
     outlook = 'overcast,overcast,overcast,overcast,rainy,rainy,rainy,rainy,rainy,sunny,sunny,sunny,sunny,sunny'.split(
@@ -49,7 +45,7 @@ def test_case():
     #     "outlook"] == "overcast")])
     # print("-------\n")
     # print(ans)
-    print(df)
+    # print(df)
 
 
     try:
@@ -72,9 +68,7 @@ def test_case():
         print(e)
 
     try:
-        # if get_avg_info_of_attribute(df, 'temp') >= 0.908 and get_avg_info_of_attribute(df, 'temp') <= 0.914:
-        if get_avg_info_of_attribute(df, 'humidity') >= 0.908 and get_avg_info_of_attribute(df, 'humidity') <= 0.914:
-
+        if get_avg_info_of_attribute(df, 'temp') >= 0.908 and get_avg_info_of_attribute(df, 'temp') <= 0.914:
             print("Test Case 3 for the function get_avg_info_of_attribute PASSED")
         else:
             print("Test Case 3 for the function get_avg_info_of_attribute FAILED")
