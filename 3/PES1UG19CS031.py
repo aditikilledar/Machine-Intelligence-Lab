@@ -54,13 +54,27 @@ def get_selected_attribute(df):
 
     example : ({'A':0.123,'B':0.768,'C':1.23} , 'C')
     '''
-    # # TODO
+    # TODO
+    getCount(df)
     pass
 # --------------------------------------------------
-def getCount(df, subatt):
-    '''returns number of times subatt's aprt of the class we want'''
-    count = 0
-
+def getCount(df):
+    '''returns number of times the each class we want'''
+    print("in getCount")
     #TODO
-    
-    return count
+        #  extract types of classes forst
+    # In iloc, [initial row:ending row, initial column:ending column]
+    last = df.columns.values[-1]
+    categories = {key:0 for key in df[last].unique()}
+    print(categories)
+
+    # iterate over each of these classes to get count
+    for categ in categories.keys():
+        countpercateg = 0
+        minidf = df[df[last] == categ]
+        countpercateg = len(minidf)
+        categories[categ] = countpercateg
+
+    print(categories)
+
+    return categories

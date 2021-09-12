@@ -83,20 +83,20 @@ def test_case():
         print("Test Case 3 for the function get_avg_info_of_attribute FAILED")
         print(e)
 
-    # try:
-    #     columns = ['outlook', 'temp', 'humidity', 'windy', 'play']
-    #     ans = get_selected_attribute(df)
-    #     dictionary = ans[0]
-    #     flag = (dictionary['outlook'] >= 0.244 and dictionary['outlook'] <= 0.248) and (dictionary['temp'] >= 0.0292 and dictionary['temp'] <= 0.0296) and (
-    #         dictionary['humidity'] >= 0.150 and dictionary['humidity'] <= 0.154) and (dictionary['windy'] >= 0.046 and dictionary['windy'] <= 0.05) and (ans[1] == 'outlook')
-    #     if flag:
-    #         print("Test Case 4 for the function get_selected_attribute PASSED")
-    #     else:
-    #         print("Test Case 4 for the function get_selected_attribute FAILED")
+    try:
+        columns = ['outlook', 'temp', 'humidity', 'windy', 'play']
+        ans = get_selected_attribute(df)
+        dictionary = ans[0]
+        flag = (dictionary['outlook'] >= 0.244 and dictionary['outlook'] <= 0.248) and (dictionary['temp'] >= 0.0292 and dictionary['temp'] <= 0.0296) and (
+            dictionary['humidity'] >= 0.150 and dictionary['humidity'] <= 0.154) and (dictionary['windy'] >= 0.046 and dictionary['windy'] <= 0.05) and (ans[1] == 'outlook')
+        if flag:
+            print("Test Case 4 for the function get_selected_attribute PASSED")
+        else:
+            print("Test Case 4 for the function get_selected_attribute FAILED")
 
-    # except Exception as e:
-    #     print(e)
-    #     print("Test Case 4 for the function get_selected_attribute FAILED")
+    except Exception as e:
+        print(e)
+        print("Test Case 4 for the function get_selected_attribute FAILED")
 
 
 if __name__ == "__main__":
