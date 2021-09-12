@@ -11,37 +11,13 @@ import math
 '''Calculate the entropy of the enitre dataset'''
 # input:pandas_dataframe
 # output:int/float
-#-------------------------------
-def getYes(df):
-    ''' counts the number of times result was a yes in a df'''
-    last = df.columns.values[-1]
-    return len(df[(df[last] == "yes")])
-#-------------------------------
-def getNo(df):
-    ''' counts the number of times result was a no in a df'''
-    last = df.columns.values[-1]
-    return len(df[(df[last] == "no")])
+print("HI!")
+
 #-------------------------------
 def get_entropy_of_dataset(df):
     # TODO
 
     # E(S) = -aloga-blogb
-    # where, a = p/(n+p)
-    #    and b = n/(n+p)
-    p = getYes(df)
-    n = getNo(df)
-
-    # print(p, n)
-
-    a = p/(n+p)
-    b = n/(p+n)
-
-    if n == 0:
-        return -(a*(math.log(a,2)))
-    elif p == 0:
-        return -(b*(math.log(b,2)))
-    else:
-        return -(a*(math.log(a,2))+(b*(math.log(b,2))))
     
     return 0
 
@@ -51,25 +27,6 @@ def get_entropy_of_dataset(df):
 # output:int/float
 def get_avg_info_of_attribute(df, attribute):
     # TODO
-
-    # weighted average mean
-    sum = 0
-    # attrList = list(df.columns.values)
-    # remove last column of result
-    # result = attrList.pop()
-    # print(attrList)
-    totalyesno = getYes(df) + getNo(df)
-    attrList = df[attribute].unique()
-
-    for att in attrList:
-        # need to do [[blah, blah]] instead of just df[blah, blah] to select multiple columns # NOT NEEDED (idk why i did it)
-        # minidf = df[[att, result]]
-
-        minidf = df[df[attribute] == att]
-        miniyesno = getYes(minidf) + getNo(minidf)
-        sum += (miniyesno/totalyesno)*get_entropy_of_dataset(minidf)
-
-    avg_info = sum
 
     return avg_info
 
@@ -97,16 +54,13 @@ def get_selected_attribute(df):
 
     example : ({'A':0.123,'B':0.768,'C':1.23} , 'C')
     '''
-    # TODO
-    # Step 1 : make dict
-    information_gains = dict()
-    attrNames = (df.iloc[:,:-1]).columns.values
-    for each in attrNames:
-        information_gains[each] = get_information_gain(df, each)
-
-    # Step 2 : pick biggest
-    selected_column = max(information_gains, key=information_gains.get)
-    finalans = (information_gains, selected_column)
-
-    return finalans
+    # # TODO
+    pass
 # --------------------------------------------------
+def getCount(df, subatt):
+    '''returns number of times subatt's aprt of the class we want'''
+    count = 0
+
+    #TODO
+    
+    return count
