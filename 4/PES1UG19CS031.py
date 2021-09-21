@@ -29,7 +29,7 @@ class KNN:
         self.data = data
         self.target = target.astype(np.int64)
 
-        # print("data", self.data, "target", self.target)
+        print("data", self.data, "target", self.target)
 
         return self
 
@@ -71,20 +71,29 @@ class KNN:
             Note that each row of both neigh_dists and idx_of_neigh must be SORTED in increasing order of distance
         """
         # TODO
-        # neigh_dists = []
-        # idx_of_neigh = []
-        # return (neigh_dists, idx_of_neigh)
-        lni = self.find_distance(x)
-        r = [[], []]
-        
-        for i in range(len(lni)):
-            indices = [i for i in range(self.data.shape[0])]
-            d = list(list(zip(*list(sorted(zip(lni[i], indices)))))[0])
-            e = list(list(zip(*list(sorted(zip(lni[i], indices)))))[1])
-            r[0].append(d[0:self.k_neigh])
-            r[1].append(e[0:self.k_neigh])
 
-        return r
+        dists = self.find_distance(x)
+        # print(">>>>distances")
+        # for e in dists:
+        #     print(e)
+
+        result = [[], []]
+        
+        for idx in range(len(dists)):
+            # print("------------\nin iteration i", idx)
+
+            rownum = [j for j in range(len(self.data))]
+            sorted_dists = sorted(zip(dists[idx], rownum))
+
+            # print("!!!!!!!!!!!!!!!TEST1", sorted_dists)
+            neigh_d = list(zip(*list(sorted_dists)))[0]
+            neigh_idx = list(zip(*list(sorted_dists)))[1]
+
+            result[0].append(neigh_d[0:self.k_neigh])
+            result[1].append(neigh_idx[0:self.k_neigh])
+            # print("RESULTS", result)
+        # print("final asnwer = \n", result)
+        return result
 
     def predict(self, x):
         """
@@ -94,31 +103,61 @@ class KNN:
         Returns:
             pred: Vector of length N (Predicted target value for each input)(int)
         """
-        # TODO
-        # if self.weighted == True:
-        #     # weighted
+        kneigh = self.k_neighbours(x)
+        print(f"~~~~~~~~~~~~~~~~~~~~~~~~~~\n{x}\n~~~~~~~~~~~~~~~~~~~~~~~~~\n{kneigh}~~~~~~~~~~~~~~~~~~~~~~")
 
-        # else:
-        #     # not weighted
+        nearest = kneigh[0]
+        indexes = kneigh[1]
 
-        # pass
-        indices = self.k_neighbours(x)[1]
-        r = []
-        for i in range(len(indices)):
-            f = {}
-            for j in range(len(indices[i])):
-                if self.target[indices[i][j]] in f:
-                    f[self.target[indices[i][j]]] += 1
-                else:
-                    f[self.target[indices[i][j]]] = 1 
-            maxF = 0
-            maxK = None
-            for i in range(min(f), max(f)+1):
-                if f[i] > maxF:
-                    maxF = f[i]
-                    maxK = i
-            r.append(maxK)
-        return r
+        prediction = [0]*(len(nearest))
+        print("prediction", prediction)
+
+        for row in range(len(nearest)):
+            
+
+            print("$$$$$ ROW", row)
+            for i in range(len(nearest)):
+                print("-------\n", i)
+                print("!!!!1", nearest[i], indexes[i])
+                votes = { key:0 for key in np.unique(self.target)}
+                print("VOTES", votes)
+                for j in range(len(nearest[i])):
+                    print(nearest[i][j], indexes[i][j], "%%")
+
+                    if self.weighted == True:
+                        # weighted
+                        closeneigh = indexes[i][j]
+                        weight = nearest[i][j] + 0.00000000001
+                        votes[self.target[closeneigh]] += (1/weight)
+
+
+                    if self.weighted == False:
+                        # not weighted 
+                        #  add up votes
+                        closeneigh = indexes[i][j]
+                        votes[self.target[closeneigh]] +=1
+                        # pass
+                print("VOTES for i=", row, votes)
+                prediction[row] = max(zip(votes.values(), votes.keys()))[1]
+                print(prediction, "is predicted class$$$$$$$$$$$$$$$$$$$")
+
+        print(prediction)
+        return prediction
+
+
+        # [
+        #   [(0.6124069400000001, 0.70111576, 0.7957107400000001),
+        #   (0.7151229399999999, 0.9783993200000001, 1.2414143899999999),
+        #   (0.64586644, 0.6784257499999999, 0.7519419199999999),
+        #    (0.56278538, 0.8848947200000001, 1.00406933), 
+        #    (0.4384014299999999, 0.44120603, 0.8628504700000001)]
+
+        #    , [(2, 4, 9),
+        #     (2, 4, 8), 
+        #     (6, 9, 3),
+        #      (3, 6, 9),
+        #       (0, 4, 2)]
+        # ]
 
     def evaluate(self, x, y):
         """
@@ -135,5 +174,6 @@ class KNN:
         prediction = self.predict(x)
         correct = np.sum(prediction == y)
         accuracy = ((correct/len(y))*100)
+        
         return accuracy
         

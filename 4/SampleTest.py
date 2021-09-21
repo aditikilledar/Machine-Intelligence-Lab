@@ -121,31 +121,36 @@ def test_case2():
         np.testing.assert_array_almost_equal(
             model.k_neighbours(X_train[0:2, :])[0], kneigh_dist, decimal=2)
         print("Test Case 1 for the function k_neighbours (distance) PASSED")
-    except:
+    except Exception as e:
+        print(e)
         print("Test Case 1 for the function k_neighbours (distance) FAILED")
 
     try:
         np.testing.assert_array_equal(
             model.k_neighbours(X_train[0:2, :])[1], kneigh_idx)
         print("Test Case 2 for the function k_neighbours (idx) PASSED")
-    except:
+    except Exception as e:
+        print(e)
         print("Test Case 2 for the function k_neighbours (idx) FAILED")
 
     try:
         np.testing.assert_array_equal(
             model.predict(X_test), pred)
         print("Test Case 3 for the function predict PASSED")
-    except:
+    except Exception as e:
+        print(e)
         print("Test Case 3 for the function predict FAILED")
 
     try:
+        print("EXPECTED!!", y_test)
         assert model.evaluate(X_test, y_test) == 60
         print("Test Case 4 for the function evaluate PASSED")
-    except:
+    except Exception as e:
+        print(e)
         print("Test Case 4 for the function evaluate FAILED")
 
 if __name__ == "__main__":
     print("------Dataset 1-------")
     test_case1()
-    print("\n------Dataset 2-------")
-    test_case2()
+    # print("\n------Dataset 2-------")
+    # test_case2()
