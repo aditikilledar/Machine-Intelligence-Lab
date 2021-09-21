@@ -109,37 +109,74 @@ class KNN:
         nearest = kneigh[0]
         indexes = kneigh[1]
 
-        prediction = [0]*(len(nearest))
+        easyneigh = list(zip(nearest, indexes))
+        print(f"=====================\n{easyneigh}\n======================")
+
+        prediction = [-9]*(len(nearest))
         print("prediction", prediction)
 
-        for row in range(len(nearest)):
-            
+        # votes = { key:0 for key in np.unique(self.target)}
+        # print("VOTES", votes)
 
-            print("$$$$$ ROW", row)
-            for i in range(len(nearest)):
-                print("-------\n", i)
-                print("!!!!1", nearest[i], indexes[i])
-                votes = { key:0 for key in np.unique(self.target)}
+
+        for row in range(len(easyneigh)):
+            print("----------------------------", row)
+            print(easyneigh[row])
+            votes = { key:0 for key in np.unique(self.target)}
+            # print("VOTES", votes)
+            for idx in range(len(easyneigh[row][0])):
+                print("inside easyneigh row")
+                print("easyneighrow 1", easyneigh[row][1][idx])
                 print("VOTES", votes)
-                for j in range(len(nearest[i])):
-                    print(nearest[i][j], indexes[i][j], "%%")
+                if self.weighted == False:
+                    # not weighted 
+                    #  add up votes
+                    closeneigh = easyneigh[row][1][idx]
+                    targ = self.target[closeneigh]
+                    print("TARG", targ)
+                    votes[targ] +=1
 
-                    if self.weighted == True:
-                        # weighted
-                        closeneigh = indexes[i][j]
-                        weight = nearest[i][j] + 0.00000000001
-                        votes[self.target[closeneigh]] += (1/weight)
+                if self.weighted == True:
+                    # weighted
+                    closeneigh = easyneigh[row][1][idx]
+                    targ = self.target[closeneigh]
+                    print("TARG", targ)
+
+                    weight = easyneigh[row][0][idx] + 0.00000000001
+                    votes[targ] += (1/weight)
+                
+
+                print("VOTES", votes)
+                prediction[row] = max(votes, key= lambda x: votes[x])
+                print(prediction)
 
 
-                    if self.weighted == False:
-                        # not weighted 
-                        #  add up votes
-                        closeneigh = indexes[i][j]
-                        votes[self.target[closeneigh]] +=1
-                        # pass
-                print("VOTES for i=", row, votes)
-                prediction[row] = max(zip(votes.values(), votes.keys()))[1]
-                print(prediction, "is predicted class$$$$$$$$$$$$$$$$$$$")
+            # for i in range(len(nearest[0])):
+            #     print("-------\n", i)
+            #     print("!!!!", nearest[i], indexes[i])
+            #     votes = { key:0 for key in np.unique(self.target)}
+            #     print("VOTES", votes)
+                
+            #     for j in range(len(nearest[i])):
+            #         print(nearest[i][j], indexes[i][j], "%%")
+
+            #         if self.weighted == True:
+            #             # weighted
+            #             closeneigh = indexes[i][j]
+            #             weight = nearest[i][i] + 0.00000000001
+            #             votes[self.target[closeneigh]] += (1/weight)
+
+            #         if self.weighted == False:
+            #             # not weighted 
+            #             #  add up votes
+            #             closeneigh = indexes[i][j]
+            #             votes[self.target[closeneigh]] +=1
+            #         # pass
+
+
+                # print("VOTES for i=",row, votes) #rpw
+                # prediction[row] = max(votes, key= lambda x: votes[x])
+                # print(prediction, "is predicted class$$$$$$$$$$$$$$$$$$$")
 
         print(prediction)
         return prediction
