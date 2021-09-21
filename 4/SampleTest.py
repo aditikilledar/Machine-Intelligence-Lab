@@ -31,14 +31,14 @@ def test_case1():
                  [7.673756466, 3.508563011, 1]])
     X = data[:, 0:2] #data
     y = data[:, 2] # classifications
-    print("this is x", X)
-    print("this is y", y)
+    # print("this is x", X)
+    # print("this is y", y)
 
     dist = np.array([[0.0, 1.3290173915275787, 1.9494646655653247, 1.5591439385540549, 0.5356280721938492,
                     4.850940186986411, 2.592833759950511, 4.214227042632867, 6.522409988228337, 4.985585382449795],
                     [1.3290173915275787, 0.0, 2.80769851166859, 0.5177260009197887, 1.7231219074407058, 6.174826117844725,
                     3.876611681862114, 5.4890230596711325, 7.66582710454398, 6.313232155500879]])
-    print("this is Dist\n", dist)
+
     model = KNN(k_neigh=2, p=2)
     model.fit(X, y)
 
@@ -141,13 +141,12 @@ def test_case2():
         print(e)
         print("Test Case 3 for the function predict FAILED")
 
-    # try:
-    #     print("EXPECTED!!", y_test)
-    #     assert model.evaluate(X_test, y_test) == 60
-    #     print("Test Case 4 for the function evaluate PASSED")
-    # except Exception as e:
-    #     print(e)
-    #     print("Test Case 4 for the function evaluate FAILED")
+    try:
+        assert model.evaluate(X_test, y_test) == 60
+        print("Test Case 4 for the function evaluate PASSED")
+    except Exception as e:
+        print(e)
+        print("Test Case 4 for the function evaluate FAILED")
 
 if __name__ == "__main__":
     print("------Dataset 1-------")

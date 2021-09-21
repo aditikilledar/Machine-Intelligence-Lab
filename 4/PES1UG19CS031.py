@@ -29,7 +29,7 @@ class KNN:
         self.data = data
         self.target = target.astype(np.int64)
 
-        print("data", self.data, "target", self.target)
+            # print("data", self.data, "target", self.target)
 
         return self
 
@@ -73,10 +73,6 @@ class KNN:
         # TODO
 
         dists = self.find_distance(x)
-        # print(">>>>distances")
-        # for e in dists:
-        #     print(e)
-
         result = [[], []]
         
         for idx in range(len(dists)):
@@ -85,14 +81,11 @@ class KNN:
             rownum = [j for j in range(len(self.data))]
             sorted_dists = sorted(zip(dists[idx], rownum))
 
-            # print("!!!!!!!!!!!!!!!TEST1", sorted_dists)
             neigh_d = list(zip(*list(sorted_dists)))[0]
             neigh_idx = list(zip(*list(sorted_dists)))[1]
 
             result[0].append(neigh_d[0:self.k_neigh])
             result[1].append(neigh_idx[0:self.k_neigh])
-            # print("RESULTS", result)
-        # print("final asnwer = \n", result)
         return result
 
     def predict(self, x):
@@ -104,97 +97,33 @@ class KNN:
             pred: Vector of length N (Predicted target value for each input)(int)
         """
         kneigh = self.k_neighbours(x)
-        print(f"~~~~~~~~~~~~~~~~~~~~~~~~~~\n{x}\n~~~~~~~~~~~~~~~~~~~~~~~~~\n{kneigh}~~~~~~~~~~~~~~~~~~~~~~")
-
         nearest = kneigh[0]
         indexes = kneigh[1]
-
         easyneigh = list(zip(nearest, indexes))
-        print(f"=====================\n{easyneigh}\n======================")
-
         prediction = [-9]*(len(nearest))
-        print("prediction", prediction)
-
-        # votes = { key:0 for key in np.unique(self.target)}
-        # print("VOTES", votes)
-
 
         for row in range(len(easyneigh)):
-            print("----------------------------", row)
-            print(easyneigh[row])
+            # print(easyneigh[row])
             votes = { key:0 for key in np.unique(self.target)}
-            # print("VOTES", votes)
+
             for idx in range(len(easyneigh[row][0])):
-                print("inside easyneigh row")
-                print("easyneighrow 1", easyneigh[row][1][idx])
-                print("VOTES", votes)
+
                 if self.weighted == False:
-                    # not weighted 
-                    #  add up votes
                     closeneigh = easyneigh[row][1][idx]
                     targ = self.target[closeneigh]
-                    print("TARG", targ)
                     votes[targ] +=1
 
                 if self.weighted == True:
                     # weighted
                     closeneigh = easyneigh[row][1][idx]
                     targ = self.target[closeneigh]
-                    print("TARG", targ)
-
                     weight = easyneigh[row][0][idx] + 0.00000000001
                     votes[targ] += (1/weight)
-                
 
-                print("VOTES", votes)
                 prediction[row] = max(votes, key= lambda x: votes[x])
-                print(prediction)
 
-
-            # for i in range(len(nearest[0])):
-            #     print("-------\n", i)
-            #     print("!!!!", nearest[i], indexes[i])
-            #     votes = { key:0 for key in np.unique(self.target)}
-            #     print("VOTES", votes)
-                
-            #     for j in range(len(nearest[i])):
-            #         print(nearest[i][j], indexes[i][j], "%%")
-
-            #         if self.weighted == True:
-            #             # weighted
-            #             closeneigh = indexes[i][j]
-            #             weight = nearest[i][i] + 0.00000000001
-            #             votes[self.target[closeneigh]] += (1/weight)
-
-            #         if self.weighted == False:
-            #             # not weighted 
-            #             #  add up votes
-            #             closeneigh = indexes[i][j]
-            #             votes[self.target[closeneigh]] +=1
-            #         # pass
-
-
-                # print("VOTES for i=",row, votes) #rpw
-                # prediction[row] = max(votes, key= lambda x: votes[x])
-                # print(prediction, "is predicted class$$$$$$$$$$$$$$$$$$$")
-
-        print(prediction)
+        # print(prediction)
         return prediction
-
-
-        # [
-        #   [(0.6124069400000001, 0.70111576, 0.7957107400000001),
-        #   (0.7151229399999999, 0.9783993200000001, 1.2414143899999999),
-        #   (0.64586644, 0.6784257499999999, 0.7519419199999999),
-        #    (0.56278538, 0.8848947200000001, 1.00406933), 
-        #    (0.4384014299999999, 0.44120603, 0.8628504700000001)]
-
-        #    , [(2, 4, 9),
-        #     (2, 4, 8), 
-        #     (6, 9, 3),
-        #      (3, 6, 9),
-        #       (0, 4, 2)]
-        # ]
 
     def evaluate(self, x, y):
         """
