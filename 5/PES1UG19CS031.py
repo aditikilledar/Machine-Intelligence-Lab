@@ -1,5 +1,6 @@
 import numpy as np
 # WEEK 5
+print("HIIIII")
 
 class Tensor:
 
