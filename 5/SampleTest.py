@@ -29,7 +29,6 @@ sans2 = a+a
 mulans = a@b
 mulans2 = (a+b)@c # d
 sgrad = np.array([[1.0, 1.0], [1.0, 1.0]])
-print("I AM Sgraaaaaaaaaad", sgrad)
 sgrad2 = np.array([[2.0, 2.0], [2.0, 2.0]])
 mulgrad = np.array([[5.0, 6.0], [5.0, 6.0]])
 mulgrad2 = np.array([[4.0, 4.0], [6.0, 6.0]])
@@ -39,7 +38,6 @@ mulgrad4 = np.array([[8.0, 8.0], [13.0, 13.0]])
 def test_case():
 
     try:
-        print("i am inside test1")
         sans.backward()
         np.testing.assert_array_almost_equal(a.grad, sgrad, decimal=2)
         print("Tests Case 1 for the function Add Grad PASSED")
