@@ -3,7 +3,6 @@ import importlib
 import argparse
 import numpy as np
 
-
 parser = argparse.ArgumentParser()
 parser.add_argument('--SRN', required=True)
 
@@ -25,25 +24,27 @@ a = Tensor(np.array([[1.0, 2.0], [3.0, 4.0]]))
 b = Tensor(np.array([[3.0, 2.0], [1.0, 5.0]]), requires_grad=False)
 c = Tensor(np.array([[3.2, 4.5], [6.1, 4.2]]))
 z = np.array([[0.0, 0.0], [0.0, 0.0]])
-sans = a+b
+sans = a+b # add res
 sans2 = a+a
 mulans = a@b
-mulans2 = (a+b)@c
+mulans2 = (a+b)@c # d
 sgrad = np.array([[1.0, 1.0], [1.0, 1.0]])
+print("I AM Sgraaaaaaaaaad", sgrad)
 sgrad2 = np.array([[2.0, 2.0], [2.0, 2.0]])
 mulgrad = np.array([[5.0, 6.0], [5.0, 6.0]])
 mulgrad2 = np.array([[4.0, 4.0], [6.0, 6.0]])
 mulgrad3 = np.array([[7.7, 10.29], [7.7, 10.29]])
 mulgrad4 = np.array([[8.0, 8.0], [13.0, 13.0]])
 
-
 def test_case():
 
     try:
+        print("i am inside test1")
         sans.backward()
         np.testing.assert_array_almost_equal(a.grad, sgrad, decimal=2)
-        print("Test Case 1 for the function Add Grad PASSED")
-    except:
+        print("Tests Case 1 for the function Add Grad PASSED")
+    except Exception as e:
+        print(e);
         print("Test Case 1 for the function Add Grad FAILED")
 
     try:

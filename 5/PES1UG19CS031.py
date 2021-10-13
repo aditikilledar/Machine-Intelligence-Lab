@@ -1,6 +1,5 @@
 import numpy as np
 # WEEK 5
-print("HIIIII")
 
 class Tensor:
 
@@ -123,7 +122,15 @@ class Tensor:
                 Gradient to a and b
         """
         # TODO
-        pass
+        # if its c = a + b
+        a = self.history[1]
+        b = self.history[0]
+
+        # if grad is required for any of the ops
+        
+
+
+        return gradTuple
 
     def grad_matmul(self, gradients=None):
         """
@@ -159,4 +166,5 @@ class Tensor:
             Nothing. (The gradients of leaf have to set in their respective attribute(leafobj.grad))
         """
         # TODO
+        self.grad_add()
         pass
