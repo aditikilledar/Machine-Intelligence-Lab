@@ -33,7 +33,7 @@ class SVM:
         """
 
         # TODO
-        pipe = Pipeline([('scalar4',StandardScaler()),('svc_classifier',SVC())])
+        pipe = Pipeline([('scalar',StandardScaler()),('svc_classifier',SVC())])
         pipe.fit(self.X, self.y)
         return pipe
 
