@@ -1,9 +1,9 @@
 from sklearn.svm import SVC
+from sklearn.decomposition import PCA
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import *
 import pandas as pd
 import numpy as np
-
 
 class SVM:
 
@@ -33,7 +33,7 @@ class SVM:
         """
 
         # TODO
-        pipe = Pipeline([('scalar',StandardScaler()),('svc_classifier',SVC())])
-        pipe.fit(self.X, self.y)
-        return pipe
+        svmpipe = Pipeline([('scalar',StandardScaler()),('svc_classifier',SVC())])
+        svmpipe.fit(self.X, self.y)
+        return svmpipe
 
