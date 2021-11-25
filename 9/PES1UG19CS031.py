@@ -81,7 +81,17 @@ class KMeansClustering:
         Change self.centroids
         """
         #TODO
-        pass
+        # numCentroids = len(self.centroids)
+        # numC = len(self.centroids[0])
+        updatedCentroid = np.zeros(shape=(len(self.centroids), len(self.centroids[0])))
+        j=0
+        for i in cluster_assgn:
+            updatedCentroid[i] = np.add(updatedCentroid[i],data[j])
+            j+=1
+        cluster_assgn = np.array(cluster_assgn)
+        for k in range(len(updatedCentroid)):
+            add = (cluster_assgn==k).sum()
+            updatedCentroid[k] = (updatedCentroid[k])/add)  
 
     def evaluate(self, data, cluster_assign):
         """
@@ -93,4 +103,7 @@ class KMeansClustering:
             metric : (float.)
         """
         #TODO
-        pass
+        errval = 0
+        for i in range(len(data)):
+            errval += sum([data[i][j] - self.centroids[cluster_assign[i][j])**2 for j in range(len(data[i]))])
+        return errval

@@ -1,5 +1,4 @@
 import numpy as np
-# WEEK 5
 
 class Tensor:
 
@@ -122,33 +121,17 @@ class Tensor:
                 Gradient to a and b
         """
         # TODO
-        # if its c = a + b
-        a1 = self.history[1]
-        b1 = self.history[0]
-
-        # initiailse non-leaf grads to 0's
-        a1.grad = np.zeros_like(a1.arr)
-        b1.grad = np.zeros_like(b1.arr) 
-
-        # if grad is required for any of the operations, make it an array of 1's
-        if a1.requires_grad == True:
-            a1.grad += np.ones_like(a1.arr)
-        if b1.requires_grad == True:
-            b1.grad += np.ones_like(b1.arr)
-
-        # if gradient is required, return after multiplying gradient and ones array
-        if gradients is not None:
-            if a1.requires_grad:
-                a1.grad = np.multiply(np.ones_like(a1.arr), gradients)
-            if b1.requires_grad:
-                b1.grad = np.multiply(np.ones_like(b1.arr), gradients)
-
-            return (a1.grad, b1.grad)
-
-        else: 
-            # gradients IS none, no need to multiply gradient
-            return (a1.grad, b1.grad)
-
+        op1 = self.history[1]
+        op2 = self.history[2]
+        op1.grad=np.zeros_like(op1.arr)
+        op2.grad=np.zeros_like(op2.arr)
+        if op1.requires_grad: op1.grad += np.ones_like(op1.arr)
+        if op2.requires_grad: op2.grad += np.ones_like(op2.arr)
+        if gradients is None:
+            return (op1.grad,op2.grad)
+        if op1.requires_grad: op1.grad = np.multiply(np.ones_like(op1.arr), gradients)
+        if op2.requires_grad: op2.grad = np.multiply(np.ones_like(op2.arr), gradients)
+        return (op1.grad, op2.grad)
 
     def grad_matmul(self, gradients=None):
         """
@@ -163,32 +146,20 @@ class Tensor:
                 Gradients to a and b
         """
         # TODO
-        #  extract operands
-        a1 = self.history[1]
-        b1 = self.history[2]
-
-        # # if grad is required for any of the operations, make it an array of 1's
-        # if a1.requires_grad == True:
-        #     a1.grad += np.ones_like(a1.arr)
-        # if b1.requires_grad == True:
-        #     b1.grad += np.ones_like(b1.arr)
-
-        if gradients is None: # means G is 1's array
-            if a1.requires_grad: 
-                # dc/da = G.b'
-                a1.grad += np.matmul(np.ones_like(a1.arr), (b1.arr).transpose())
-            
-            if b1.requires_grad: 
-                #dc/db = a'.G
-                b1.grad += (np.matmul(np.ones_like(b1.arr), a1.arr)).transpose()
-
+        op1 = self.history[1]
+        op2 = self.history[2]
+        if gradients is None:
+        	if op1.requires_grad:
+        		op1.grad += np.matmul(np.ones_like(op1.arr), op2.arr.transpose())
+        	if op2.requires_grad:
+        		op2.grad += (np.matmul(np.ones_like(op2.arr), op1.arr)).transpose()
         else:
-            if a1.requires_grad:
-        	    a1.grad += np.multiply(np.matmul(np.ones_like(a1.arr), (b1.arr).transpose()), gradients)
-            if b1.requires_grad:
-                b1.grad += np.multiply(np.matmul(np.ones_like(b1.arr), a1.arr).transpose(), gradients)
-
-        return (a1.grad, b1.grad)     
+        	if op1.requires_grad:
+        		op1.grad += np.multiply(np.matmul(np.ones_like(op1.arr), op2.arr.transpose()), gradients)
+        	if op2.requires_grad:
+        		op2.grad += np.multiply(np.matmul(np.ones_like(op2.arr), op1.arr).transpose(), gradients)
+     
+        return (op1.grad, op2.grad)
 
     def backward(self, gradients=None):
         """
@@ -209,27 +180,27 @@ class Tensor:
             Nothing. (The gradients of leaf have to set in their respective attribute(leafobj.grad))
         """
         # TODO
-        self.grad_add()
-
-        if self.requires_grad == None: 
+         
+        if self.requires_grad == None:
             return
-
-        if self.history[0] == "matmul":
-            gradient = self.grad_matmul(gradients)
-            if self.history[1]:
-                self.history[1].backward(gradient[0])
-            if self.history[2]:
-                self.history[2].backward(gradient[1])
-
-        elif self.history[0] == "add":
+        if self.history[0] == 'add':
+           
             gradient = self.grad_add(gradients)
             if self.history[1]:
                 self.history[1].backward(gradient[0])
             if self.history[2]:
                 self.history[2].backward(gradient[1])
-
+            
+        elif self.history[0] == 'matmul':
+            gradient = self.grad_matmul(gradients)
+            if self.history[1]:
+                self.history[1].backward(gradient[0])
+            if self.history[2]:
+                self.history[2].backward(gradient[1])
         else:
-            if self.requires_grad == True:
+            if self.requires_grad:
                 self.grad = gradients
-
-        
+    
+       
+       
+        		
